@@ -1,0 +1,15 @@
+{
+  "name": "air-bot-hosting-bot",
+  "version": "1.0.0",
+  "description": "Telegram Bot Hosting Manager by RAH BRO",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "express": "^4.18.2",
+    "node-telegram-bot-api": "^0.61.0",
+    "fs-extra": "^11.1.1"
+  }
+}

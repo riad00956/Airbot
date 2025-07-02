@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: air-bot-hosting-bot
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
