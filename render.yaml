@@ -5,3 +5,4 @@ services:
     plan: free
     buildCommand: npm install
     startCommand: npm start
+    port: 6000
