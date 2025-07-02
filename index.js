@@ -1,13 +1,13 @@
+require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const fs = require('fs');
 const { exec } = require('child_process');
 
-const TOKEN = '8091091309:AAGOGUUh3q-d5fvPkEjjCvHyHIENyRQkr5s';  // আপনার ম্যানেজার বটের টোকেন
-const ADMIN_ID = '7832264582';  // আপনার এডমিন আইডি
-const CONTACT = '@rahbro22';
-
-const PORT = 6000;
+const TOKEN = process.env.BOT_TOKEN;
+const ADMIN_ID = process.env.ADMIN_ID;
+const CONTACT = process.env.CONTACT;
+const PORT = process.env.PORT || 6000;
 
 const app = express();
 
@@ -21,7 +21,6 @@ app.listen(PORT, () => {
 
 const bot = new TelegramBot(TOKEN, { polling: true });
 
-// ইউজার এবং প্ল্যান ডাটা লোড
 let users = [];
 let plans = {};
 
@@ -37,7 +36,6 @@ try {
   plans = {};
 }
 
-// /start কমান্ড: রুলস দেখানো
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const rules = `
@@ -71,7 +69,6 @@ By using this service, you accept all rules.
   }
 });
 
-// Callbacks
 bot.on('callback_query', (query) => {
   const chatId = query.message.chat.id;
 
@@ -92,7 +89,7 @@ bot.on('callback_query', (query) => {
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot('${token}', { polling: true });
 
-bot.onText(/\\\\start/, (msg) => {
+bot.onText(/\\start/, (msg) => {
   bot.sendMessage(msg.chat.id, '✅ Your bot is running! Hosted by AIR BOT HOSTING BOT [RAH BRO]');
 });
 `;
@@ -111,7 +108,6 @@ bot.onText(/\\\\start/, (msg) => {
   }
 });
 
-// অ্যাডমিন প্যানেল
 bot.onText(/\/admin/, (msg) => {
   if (msg.from.id != ADMIN_ID) return;
 
@@ -126,7 +122,6 @@ bot.onText(/\/admin/, (msg) => {
   bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown' });
 });
 
-// সাপোর্ট
 bot.onText(/\/support/, (msg) => {
   bot.sendMessage(msg.chat.id, `📞 Contact Admin: ${CONTACT}`);
-});});
+});
