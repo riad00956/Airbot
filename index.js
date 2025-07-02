@@ -1,16 +1,43 @@
 const TelegramBot = require('node-telegram-bot-api');
+const express = require('express');
 const fs = require('fs');
 const { exec } = require('child_process');
 
-const TOKEN = '8091091309:AAGOGUUh3q-d5fvPkEjjCvHyHIENyRQkr5s';
-const bot = new TelegramBot(TOKEN, { polling: true });
-
-const ADMIN_ID = '7832264582'; // New admin ID
+const TOKEN = '8091091309:AAGOGUUh3q-d5fvPkEjjCvHyHIENyRQkr5s';  // আপনার ম্যানেজার বটের টোকেন
+const ADMIN_ID = '7832264582';  // আপনার এডমিন আইডি
 const CONTACT = '@rahbro22';
 
-let users = JSON.parse(fs.readFileSync('users.json'));
-let plans = JSON.parse(fs.readFileSync('plans.json'));
+const PORT = 6000;
 
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('AIR BOT HOSTING BOT [RAH BRO] is running on port ' + PORT);
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+const bot = new TelegramBot(TOKEN, { polling: true });
+
+// ইউজার এবং প্ল্যান ডাটা লোড
+let users = [];
+let plans = {};
+
+try {
+  users = JSON.parse(fs.readFileSync('users.json'));
+} catch {
+  users = [];
+}
+
+try {
+  plans = JSON.parse(fs.readFileSync('plans.json'));
+} catch {
+  plans = {};
+}
+
+// /start কমান্ড: রুলস দেখানো
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const rules = `
@@ -44,6 +71,7 @@ By using this service, you accept all rules.
   }
 });
 
+// Callbacks
 bot.on('callback_query', (query) => {
   const chatId = query.message.chat.id;
 
@@ -64,8 +92,8 @@ bot.on('callback_query', (query) => {
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot('${token}', { polling: true });
 
-bot.onText(/\\start/, (msg) => {
-  bot.sendMessage(msg.chat.id, '✅ Your bot is running!\\nHosted by AIR BOT HOSTING BOT [RAH BRO]');
+bot.onText(/\\\\start/, (msg) => {
+  bot.sendMessage(msg.chat.id, '✅ Your bot is running! Hosted by AIR BOT HOSTING BOT [RAH BRO]');
 });
 `;
       fs.writeFileSync(`${userFolder}/bot.js`, defaultBot);
@@ -83,6 +111,7 @@ bot.onText(/\\start/, (msg) => {
   }
 });
 
+// অ্যাডমিন প্যানেল
 bot.onText(/\/admin/, (msg) => {
   if (msg.from.id != ADMIN_ID) return;
 
@@ -97,6 +126,7 @@ bot.onText(/\/admin/, (msg) => {
   bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown' });
 });
 
+// সাপোর্ট
 bot.onText(/\/support/, (msg) => {
   bot.sendMessage(msg.chat.id, `📞 Contact Admin: ${CONTACT}`);
-});
+});});
